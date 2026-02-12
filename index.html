@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IndusInd Bank</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="top-red-bar"></div>
+<div class="top-red-bar"></div>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+<div class="site-logo">
+  <img src="logo.png" alt="IndusInd Logo">
+  <span class="bank-name">IndusInd Bank</span>
+</div>
+
+  <div class="nav-right">
+ 
+    <a href="#">Personal</a>
+    <a href="#">Cards</a>
+    <a href="#">Loans</a>
+    <a href="#">Support</a>
+  </div>
+</header>
+
+<!-- ================= BANNER SLIDER ================= -->
+<section class="banner-slider">
+
+  <div class="banner-slide active">
+    <img src="banner.png" alt="Banner 1">
+  </div>
+
+  <div class="banner-slide">
+    <img src="banner1.png" alt="Banner 2">
+  </div>
+
+  <div class="banner-slide">
+    <img src="banner2.png" alt="Banner 3">
+  </div>
+
+  <div class="banner-dots">
+    <span class="dot active" onclick="goToSlide(0)"></span>
+    <span class="dot" onclick="goToSlide(1)"></span>
+    <span class="dot" onclick="goToSlide(2)"></span>
+  </div>
+
+</section>
+<section class="ad-strip">
+  <div class="ad-track">
+    <div class="ad-item">💳 Zero Joining Fee Credit Cards</div>
+    <div class="ad-item">🎬 Movie Tickets Cashback Offers</div>
+    <div class="ad-item">⛽ 1% Fuel Surcharge Waiver</div>
+    <div class="ad-item">✈️ Complimentary Airport Lounge Access</div>
+    <div class="ad-item">📈 Easy Credit Limit Increase</div>
+
+    <!-- duplicate for seamless loop -->
+    <div class="ad-item">💳 Zero Joining Fee Credit Cards</div>
+    <div class="ad-item">🎬 Movie Tickets Cashback Offers</div>
+    <div class="ad-item">⛽ 1% Fuel Surcharge Waiver</div>
+    <div class="ad-item">✈️ Complimentary Airport Lounge Access</div>
+    <div class="ad-item">📈 Easy Credit Limit Increase</div>
+  </div>
+</section>
+
+<!-- ================= ICICI STYLE CTA ================= -->
+<section class="icici-cta">
+  <h2>Enjoy <span>2X EDGE REWARDS</span> Points*</h2>
+  <p>on online spends with our Credit Card</p>
+  <a href="apply.html" class="cta-btn">Apply Now</a>
+</section>
+
+<!-- ================= CREDIT CARDS ================= -->
+<section class="card-list">
+
+  <!-- CARD 1 -->
+  <div class="credit-card">
+    <img src="card1.png" alt="Coral Card">
+    <div class="card-info">
+      <h3>Coral Credit Card</h3>
+      <ul>
+        <li>25% discount on movie tickets</li>
+        <li>Complimentary Airport Lounge Access</li>
+        <li>1% Fuel Surcharge Waiver</li>
+      </ul>
+      <div class="card-actions">
+       <a href="apply.html" class="cta-btn">Apply Now</a>
+
+        <a href="#">Know More ›</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2 -->
+  <div class="credit-card recommended">
+    <span class="badge">Recommended</span>
+    <img src="card2.png" alt="Platinum Card">
+    <div class="card-info">
+      <h3>Platinum Credit Card</h3>
+      <ul>
+        <li>Zero Joining & Annual Fees</li>
+        <li>2 Reward Points per ₹100 spent</li>
+        <li>1% Fuel Surcharge Waiver</li>
+      </ul>
+      <div class="card-actions">
+      <a href="apply.html" class="cta-btn">Apply Now</a>
+
+        <a href="#">Know More ›</a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  © 2026 IndusInd Bank. All rights reserved.
+</footer>
+
+<!-- ================= SLIDER JS ================= -->
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll(".banner-slide");
+const dots = document.querySelectorAll(".dot");
+
+function showSlide(index){
+  slides.forEach(s => s.classList.remove("active"));
+  dots.forEach(d => d.classList.remove("active"));
+
+  slides[index].classList.add("active");
+  dots[index].classList.add("active");
+  currentSlide = index;
+}
+
+function nextSlide(){
+  let next = (currentSlide + 1) % slides.length;
+  showSlide(next);
+}
+
+function goToSlide(index){
+  showSlide(index);
+}
+
+setInterval(nextSlide, 4000);
+</script>
+
+</body>
+</html>

